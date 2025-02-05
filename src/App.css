@@ -40,6 +40,28 @@
   --shadow-color: rgba(0, 0, 0, 0.3);
   --hover-bg: #333333;
   --separator-color: #404040;
+  --input-bg: #141414;
+  --input-text: #e0e0e0;
+  --input-focus-bg: #1d1d1d; /* New darker focus background */
+  --input-hover-bg: #1a1a1a; /* New darker hover background */
+}
+
+/* Update input hover and focus states */
+[data-theme="dark"] .form-group input:hover,
+[data-theme="dark"] .form-group select:hover {
+  background-color: var(--input-hover-bg);
+}
+
+[data-theme="dark"] .form-group input:focus,
+[data-theme="dark"] .form-group select:focus {
+  background-color: var(--input-focus-bg);
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 1px #1a73e8;
+}
+
+/* Update dropdown hover state in dark mode */
+[data-theme="dark"] .airports-dropdown li:hover {
+  background-color: var(--input-hover-bg);
 }
 
 a {
@@ -173,7 +195,7 @@ button:focus {
 
 .bottom-row {
   display: flex;
-  gap: 24px;
+  gap: 8px;
 }
 
 .form-group {
@@ -196,8 +218,8 @@ button:focus {
   border: 1px solid var(--border-color);
   border-radius: 8px;
   font-size: 1rem;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+  background-color: var(--input-bg, var(--bg-primary));
+  color: var(--input-text, var(--text-primary));
   transition: all 0.2s ease;
 }
 
@@ -205,7 +227,7 @@ button:focus {
 .form-group select:focus {
   outline: none;
   border-color: #1a73e8;
-  background-color: var(--bg-primary);
+  background-color: var(--input-bg, var(--bg-primary));
   box-shadow: 0 0 0 1px #1a73e8;
 }
 
@@ -662,13 +684,16 @@ button:focus {
 }
 
 @media (max-width: 850px) {
+  .bottom-row {
+    gap: 8px;
+  }
   .top-row {
     flex-direction: column;
     gap: 16px;
   }
 
   .cabinClass {
-    max-width: 160px;
+    width: 176px;
   }
 
   .locations-wrapper,
@@ -694,4 +719,20 @@ button:focus {
   .switch-locations {
     flex: none; /* Prevent the switch from growing */
   }
+}
+
+@media (max-width: 385px) {
+  .dates-wrapper {
+    flex-wrap: wrap;
+    width: fit-content;
+    min-width: 0;
+  }
+  .bottom-row {
+    flex-wrap: wrap;
+  }
+}
+
+/* Update placeholder color for dark mode */
+[data-theme="dark"] .form-group input::placeholder {
+  color: #808080;
 }
