@@ -1,8 +1,8 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  /* max-width: 1280px; */
+  /* margin: 0 auto; */
+  /* padding: 2rem; */
+  /* text-align: center; */
 }
 
 :root {
@@ -18,6 +18,28 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Light mode colors */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --text-primary: #1a1a1a;
+  --text-secondary: #5f6368;
+  --border-color: #e6e6e6;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --hover-bg: #f1f3f4;
+  --separator-color: #dadce0;
+}
+
+[data-theme="dark"] {
+  /* Dark mode colors */
+  --bg-primary: #1e1e1e;
+  --bg-secondary: #2d2d2d;
+  --text-primary: #ffffff;
+  --text-secondary: #a1a1a1;
+  --border-color: #404040;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --hover-bg: #333333;
+  --separator-color: #404040;
 }
 
 a {
@@ -30,9 +52,9 @@ a:hover {
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
+  /* margin: 0; */
+  /* display: flex; */
+  /* place-items: center; */
   min-width: 320px;
   min-height: 100vh;
 }
@@ -112,21 +134,35 @@ button:focus {
 }
 
 .flight-search-container {
-  max-width: 1000px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 1rem;
-  background-color: #f8f9fa;
+  background-color: var(--bg-secondary);
+  min-height: 100vh;
+  transition: all 0.2s ease;
 }
 
 .search-form {
   display: flex;
   flex-direction: column;
-  background-color: #fff;
+  background-color: var(--bg-primary);
   border-radius: 8px;
   padding: 0.5rem;
   gap: 24px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
+  border: 1px solid var(--border-color);
+}
+
+.flight-list-item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.flight-list-item h3 {
+  font-weight: 500;
+  font-size: 14px;
 }
 
 .top-row {
@@ -149,18 +185,33 @@ button:focus {
 
 .form-group label {
   font-size: 0.75rem;
-  color: #70757a;
+  color: var(--text-secondary);
   margin-bottom: 0.25rem;
 }
 
 .form-group input,
 .form-group select {
   padding: 0.5rem;
-  border: 1px solid #dadce0;
+  padding-right: 4px;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   font-size: 1rem;
-  background: transparent;
-  color: #202124;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #1a73e8;
+  background-color: var(--bg-primary);
+  box-shadow: 0 0 0 1px #1a73e8;
+}
+
+.form-group input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.8;
 }
 
 .form-group input:focus,
@@ -181,6 +232,7 @@ button:focus {
   transition: background-color 0.2s;
   align-self: flex-end;
   outline: none;
+  margin-left: auto;
 }
 
 .search-button:hover {
@@ -197,55 +249,113 @@ button:focus {
 }
 
 .flight-card {
-  background-color: #fff;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 0.5rem;
-  display: grid;
-  grid-template-columns: 3fr 1fr;
-  align-items: center;
-  transition: background-color 0.2s;
-  border: 1px solid #dadce0;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  margin: 8px 0;
+  transition: all 0.2s ease;
+  cursor: pointer;
 }
 
 .flight-card:hover {
-  background-color: #f8f9fa;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  background-color: var(--hover-bg);
 }
 
-.flight-info {
-  text-align: left;
+.flight-card-content {
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
 }
 
-.flight-price {
-  text-align: right;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #1a73e8;
+.airline-logo-container {
+  display: flex;
+  align-items: center;
+  padding-right: 16px;
 }
 
 .airline-logo {
   width: 32px;
   height: 32px;
-  margin-right: 1rem;
+  object-fit: contain;
 }
 
-@media (max-width: 768px) {
-  .search-form {
-    grid-template-columns: 1fr;
-  }
+.flight-main-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 
-  .flight-card {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
+.flight-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
 
-  .flight-price {
-    text-align: left;
-  }
+.time-route {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.times {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.route {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.flight-details {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.separator {
+  color: var(--separator-color);
+}
+
+.airline-name {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.flight-price-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  min-width: 100px;
+}
+
+.price {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.trip-type {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+/* Remove any conflicting styles from the previous flight card */
+.flight-times,
+.flight-route,
+.airline-info {
+  display: none;
 }
 
 .flight-search-container h1 {
-  color: #202124;
+  color: var(--text-primary);
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
   text-align: left;
@@ -263,9 +373,10 @@ button:focus {
 }
 
 .dates-wrapper {
+  justify-content: flex-end;
   display: flex;
   gap: 8px;
-  flex: 1;
+  flex: 0.7;
   min-width: 300px;
 }
 
@@ -274,8 +385,9 @@ button:focus {
 }
 
 .switch-locations {
-  background-color: #fff;
-  border: 1px solid #dadce0;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
   border-radius: 50%;
   min-width: 32px;
   width: 32px;
@@ -300,19 +412,19 @@ button:focus {
 }
 
 .switch-locations:active {
-  background-color: #fff;
+  background-color: var(--bg-primary);
 }
 
 .switch-locations svg {
   width: 20px;
   height: 20px;
-  color: #70757a;
+  color: var(--text-secondary);
   transform: rotate(0deg);
   transition: transform 0.3s ease;
 }
 
 .switch-locations:hover {
-  background-color: #f1f3f4;
+  background-color: var(--hover-bg);
 }
 
 .switch-locations.rotated svg {
@@ -322,7 +434,6 @@ button:focus {
 /* Update border-radius for various elements */
 .form-group input,
 .form-group select,
-.flight-card,
 .search-button {
   border-radius: 4px;
 }
@@ -331,6 +442,7 @@ button:focus {
   position: relative;
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .origin-icon {
@@ -338,10 +450,11 @@ button:focus {
   left: 8px;
   width: 12px;
   height: 12px;
-  color: #70757a;
+  color: var(--text-secondary);
 }
 
 .origin-input {
+  width: 100%;
   padding-left: 28px !important;
 }
 
@@ -349,6 +462,7 @@ button:focus {
   position: relative;
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .destination-icon {
@@ -356,11 +470,12 @@ button:focus {
   left: 8px;
   width: 12px;
   height: 14px; /* slightly taller than the circle icon */
-  color: #70757a;
+  color: var(--text-secondary);
 }
 
 .destination-input {
   padding-left: 28px !important;
+  width: 100%;
 }
 
 .origin-input-wrapper {
@@ -373,9 +488,9 @@ button:focus {
   left: 0;
   right: 0;
   width: 400px;
-  background: white;
-  color: #1a1a1a;
-  border: 1px solid #ccc;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   margin-top: 4px;
   max-height: 200px;
@@ -383,15 +498,17 @@ button:focus {
   z-index: 1000;
   list-style: none;
   padding: 0;
+  box-shadow: 0 4px 12px var(--shadow-color);
 }
 
 .airports-dropdown li {
   padding: 8px 12px;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 .airports-dropdown li:hover {
-  background-color: #f5f5f5;
+  background-color: var(--hover-bg);
 }
 
 .loading {
@@ -400,17 +517,17 @@ button:focus {
   top: 50%;
   transform: translateY(-50%);
   font-size: 14px;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .trip-type-selector {
+  width: fit-content;
   display: flex;
   align-items: center;
-  background: #f1f3f4;
+  background: var(--bg-secondary);
   border-radius: 20px;
   padding: 2px;
   gap: 2px;
-  margin-bottom: 16px;
 }
 
 .trip-type-button {
@@ -418,7 +535,7 @@ button:focus {
   border-radius: 18px;
   border: none;
   background: none;
-  color: #5f6368;
+  color: var(--text-secondary);
   cursor: pointer;
   font-size: 14px;
   transition: all 0.2s;
@@ -426,13 +543,155 @@ button:focus {
 }
 
 .trip-type-button.active {
-  background: white;
+  background: var(--bg-primary);
   color: #1a73e8;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 2px var(--shadow-color);
 }
 
 .form-group.disabled input {
-  opacity: 0.5;
+  opacity: 0.7;
   cursor: not-allowed;
-  background-color: #f1f3f4;
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+}
+
+.loading-state {
+  color: #666;
+  text-align: center;
+  padding: 2rem;
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding: 0 4px;
+}
+
+.theme-switch {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+}
+
+.switch-container {
+  background-color: #1a1a1a;
+  border-radius: 35px;
+  width: 56px;
+  height: 28px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px 6px;
+  transition: all 0.3s ease;
+}
+
+.switch-circle {
+  position: absolute;
+  top: 4px;
+  left: 2px;
+  width: 24px;
+  height: 24px;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.switch-container.dark .switch-circle {
+  transform: translateX(39px);
+}
+
+.sun,
+.moon {
+  line-height: 1;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #808080;
+  transition: color 0.3s ease;
+}
+
+.sun {
+  opacity: 0.5;
+  margin-right: 2px;
+}
+
+.sun svg {
+  color: #ffd43b;
+}
+
+.moon {
+  opacity: 0.5;
+  margin-left: 2px;
+}
+
+.moon svg {
+  color: #f1c40f;
+}
+
+.switch-container.light .sun {
+  opacity: 1;
+}
+
+.switch-container.dark .moon {
+  opacity: 1;
+}
+
+.locations-wrapper .form-group,
+.dates-wrapper .form-group {
+  flex: 1; /* Make input fields take up equal space */
+}
+
+.dates-wrapper .form-group {
+  flex: none;
+}
+
+.bottom-row-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  row-gap: 40px;
+}
+
+@media (max-width: 850px) {
+  .top-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .cabinClass {
+    max-width: 160px;
+  }
+
+  .locations-wrapper,
+  .dates-wrapper {
+    width: 100%;
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .locations-wrapper .form-group,
+  .dates-wrapper .form-group {
+    flex: 1;
+  }
+
+  .dates-wrapper {
+    justify-content: flex-start;
+  }
+  .dates-wrapper .form-group {
+    flex: none;
+  }
+
+  /* Ensure the switch button stays the right size */
+  .switch-locations {
+    flex: none; /* Prevent the switch from growing */
+  }
 }
