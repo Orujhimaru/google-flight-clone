@@ -4,8 +4,12 @@ import { CircleIcon, LocationPinIcon, SwitchIcon } from "./components/Icons";
 import { FlightCard } from "./components/FlightCard";
 import { ThemeSwitch } from "./components/ThemeSwitch";
 import { FlightFilters } from "./components/FlightFilters";
+import flightsImage from "./assets/flights_nc_4.svg"; // Adjust the path as needed
 
 function App() {
+  const [airports, setAirports] = useState([]);
+  const [flightResults, setFlightResults] = useState([]);
+
   const [searchParams, setSearchParams] = useState({
     originName: "",
     origin: "",
@@ -19,12 +23,12 @@ function App() {
     cabinClass: "economy",
     tripType: "roundTrip",
   });
+
+  const [theme, setTheme] = useState("light");
   const [isRotated, setIsRotated] = useState(false);
-  const [airports, setAirports] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [activeField, setActiveField] = useState(null);
-  const [flightResults, setFlightResults] = useState([]);
-  const [theme, setTheme] = useState("light");
+
   const [filters, setFilters] = useState({
     maxPrice: 2000,
     maxDuration: 18,
@@ -65,18 +69,6 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-
-    // Log the request parameters first
-    console.log("Search Parameters:", {
-      originSkyId: searchParams.origin,
-      destinationSkyId: searchParams.destination,
-      originEntityId: searchParams.originDetails,
-      destinationEntityId: searchParams.destinationDetails,
-      date: searchParams.departDate,
-      cabinClass: searchParams.cabinClass,
-      adults: searchParams.passengers,
-    });
-
     try {
       const response = await fetch(
         `https://sky-scrapper.p.rapidapi.com/api/v2/flights/searchFlightsWebComplete?originSkyId=${searchParams.origin}&destinationSkyId=${searchParams.destination}&originEntityId=${searchParams.originDetails}&destinationEntityId=${searchParams.destinationDetails}&date=${searchParams.departDate}&cabinClass=${searchParams.cabinClass}&adults=${searchParams.passengers}&sortBy=best&currency=USD&market=en-US&countryCode=US`,
@@ -241,9 +233,12 @@ function App() {
 
   return (
     <div className="flight-search-container">
-      <div className="header-row">
-        <h1>Flight Search</h1>
-        <ThemeSwitch theme={theme} onToggle={toggleTheme} />
+      <div className="header-section">
+        <img src={flightsImage} alt="Flights" className="flights-banner" />
+        <div className="header-row">
+          <h1>Flight Search</h1>
+          <ThemeSwitch theme={theme} onToggle={toggleTheme} />
+        </div>
       </div>
 
       <form className="search-form" onSubmit={handleSubmit}>

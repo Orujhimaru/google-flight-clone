@@ -586,7 +586,7 @@ button:focus {
   top: 100%;
   left: 0;
   right: 0;
-  width: 400px;
+  width: 100%;
   background: var(--bg-primary);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
@@ -1107,4 +1107,25 @@ button:focus {
 .filters-header:not(.expanded) {
   border-bottom: none;
   margin-bottom: 0;
+}
+
+.header-section {
+  margin-bottom: 24px;
+}
+
+.flights-banner {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+/* Update existing header-row styles to work with the new layout */
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding: 0 4px;
 }
