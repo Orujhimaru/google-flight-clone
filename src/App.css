@@ -271,12 +271,123 @@ button:focus {
 }
 
 .flight-card {
-  background-color: var(--bg-primary);
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.flight-sections {
+  display: flex;
+  gap: 24px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.flight-section {
+  flex: 1;
+  min-width: 300px;
+  padding: 16px;
+  background: var(--bg-primary);
+  border-radius: 8px;
   border: 1px solid var(--border-color);
-  border-radius: 12px;
-  margin: 8px 0;
-  transition: all 0.2s ease;
-  cursor: pointer;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.section-header h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1.1em;
+}
+
+.airline-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.airline-logo {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
+
+.airline-name {
+  font-size: 0.9em;
+  color: var(--text-secondary);
+}
+
+.flight-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.time-group {
+  text-align: center;
+}
+
+.time {
+  font-size: 1.1em;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.date {
+  font-size: 0.9em;
+  color: var(--text-secondary);
+  margin: 4px 0;
+}
+
+.airport {
+  font-size: 1em;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.flight-duration {
+  flex: 1;
+  text-align: center;
+  position: relative;
+  padding: 8px 0;
+}
+
+.duration {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.duration-line {
+  height: 2px;
+  background: var(--border-color);
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+.duration-text {
+  background: var(--bg-primary);
+  padding: 0 8px;
+  font-size: 0.9em;
+  color: var(--text-secondary);
+  position: relative;
+  display: inline-block;
+}
+
+.stops {
+  font-size: 0.8em;
+  color: var(--text-secondary);
+  margin-top: 4px;
 }
 
 .flight-card:hover {
@@ -289,18 +400,6 @@ button:focus {
   display: flex;
   align-items: center;
   gap: 24px;
-}
-
-.airline-logo-container {
-  display: flex;
-  align-items: center;
-  padding-right: 16px;
-}
-
-.airline-logo {
-  width: 32px;
-  height: 32px;
-  object-fit: contain;
 }
 
 .flight-main-info {
@@ -328,40 +427,18 @@ button:focus {
   color: var(--text-primary);
 }
 
+/* Add dark mode specific color */
+[data-theme="dark"] .times {
+  color: #e0e0e0; /* A lighter shade for better visibility in dark mode */
+}
+
 .route {
   color: var(--text-secondary);
   font-size: 0.875rem;
 }
 
-.flight-details {
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
 .separator {
   color: var(--separator-color);
-}
-
-.airline-name {
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-}
-
-.flight-price-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 4px;
-  min-width: 100px;
-}
-
-.price {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--text-primary);
 }
 
 .trip-type {
@@ -619,14 +696,17 @@ button:focus {
   left: 2px;
   width: 24px;
   height: 24px;
-  background-color: #fff;
+  background-color: #fff; /* Default light mode color */
   border-radius: 50%;
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
+/* Add dark mode specific color for the circle */
 .switch-container.dark .switch-circle {
   transform: translateX(39px);
+  background-color: #2d2d2d; /* Darker but not as dark as the background */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4); /* Slightly stronger shadow for depth */
 }
 
 .sun,
@@ -735,4 +815,296 @@ button:focus {
 /* Update placeholder color for dark mode */
 [data-theme="dark"] .form-group input::placeholder {
   color: #808080;
+}
+
+.price-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.price {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.trip-type {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* Make departure section take full width when there's no return flight */
+.flight-section:only-child {
+  max-width: none;
+}
+
+.flight-group {
+  margin-bottom: 32px;
+}
+
+.flight-group-header {
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  margin: 24px 0 16px 0;
+  font-weight: 500;
+}
+
+.flight-group-divider {
+  border: none;
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 32px 0;
+  width: 100%;
+}
+
+.flight-filters {
+  background: var(--bg-primary);
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  margin-bottom: 24px;
+}
+
+.filter-section {
+  margin-bottom: 20px;
+}
+
+.filter-section:last-child {
+  margin-bottom: 0;
+}
+
+.filter-section h3 {
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.price-range,
+.duration-range {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.price-range input[type="range"],
+.duration-range input[type="range"] {
+  flex: 1;
+  height: 4px;
+  background: var(--border-color);
+  border-radius: 2px;
+  appearance: none;
+}
+
+.price-range input[type="range"]::-webkit-slider-thumb,
+.duration-range input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #1a73e8;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.slider-container {
+  position: relative;
+  padding: 20px 0;
+  width: 100%;
+}
+
+.price-indicator {
+  position: absolute;
+  top: -10px;
+  transform: translateX(-50%);
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.price-indicator::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 4px;
+  border-style: solid;
+  border-color: var(--text-primary) transparent transparent transparent;
+}
+
+/* Update the range input styles for better visibility */
+.price-range input[type="range"] {
+  width: 100%;
+  margin: 10px 0;
+}
+
+.duration-indicator {
+  position: absolute;
+  top: -10px;
+  transform: translateX(-50%);
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.duration-indicator::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 4px;
+  border-style: solid;
+  border-color: var(--text-primary) transparent transparent transparent;
+}
+
+/* Update both range inputs to have consistent styling */
+.price-range input[type="range"],
+.duration-range input[type="range"] {
+  width: 100%;
+  margin: 10px 0;
+}
+
+.range-filters {
+  display: flex;
+  gap: 40px;
+}
+
+.range-filters .filter-section {
+  flex: 1;
+}
+
+/* Update the datepicker icon color */
+.form-group input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.3); /* Makes it darker in light mode */
+}
+
+[data-theme="dark"]
+  .form-group
+  input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.8); /* Keeps it light in dark mode */
+}
+
+.sort-filters {
+  margin-bottom: 24px;
+}
+
+.sort-options select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.sort-options select:focus {
+  outline: none;
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 1px #1a73e8;
+}
+
+/* Dark mode styles for select */
+[data-theme="dark"] .sort-options select {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.sort-options select option {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.filters-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.filters-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-primary);
+}
+
+.filters-title h2 {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.filters-title svg {
+  width: 20px;
+  height: 20px;
+  color: var(--text-primary);
+}
+
+.expand-button {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 4px;
+  transition: transform 0.3s ease;
+}
+
+.expand-button.expanded {
+  transform: rotate(180deg);
+}
+
+.filters-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.filters-content.expanded {
+  max-height: 1000px; /* Adjust this value based on your content */
+  transition: max-height 0.3s ease-in;
+}
+
+/* Add border between header and content */
+.filters-header {
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 16px;
+}
+
+/* Only show border when expanded */
+.filters-header:not(.expanded) {
+  border-bottom: none;
+  margin-bottom: 0;
 }

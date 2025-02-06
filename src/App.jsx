@@ -3,6 +3,7 @@ import "./App.css";
 import { CircleIcon, LocationPinIcon, SwitchIcon } from "./components/Icons";
 import { FlightCard } from "./components/FlightCard";
 import { ThemeSwitch } from "./components/ThemeSwitch";
+import { FlightFilters } from "./components/FlightFilters";
 
 function App() {
   const [searchParams, setSearchParams] = useState({
@@ -24,6 +25,22 @@ function App() {
   const [activeField, setActiveField] = useState(null);
   const [flightResults, setFlightResults] = useState([]);
   const [theme, setTheme] = useState("light");
+  const [filters, setFilters] = useState({
+    maxPrice: 2000,
+    maxDuration: 18,
+    sortBy: "",
+    stops: {
+      direct: true,
+      oneStop: true,
+      twoPlus: true,
+    },
+    timeOfDay: {
+      morning: true,
+      afternoon: true,
+      evening: true,
+      night: true,
+    },
+  });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -146,6 +163,77 @@ function App() {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
     document.documentElement.setAttribute("data-theme", newTheme);
+  };
+
+  const handleFilterChange = (filterType, value) => {
+    setFilters((prev) => ({
+      ...prev,
+      [filterType]: value,
+    }));
+  };
+
+  const filterFlights = (flights) => {
+    return flights.filter((flight) => {
+      const leg = flight.legs[0];
+      const price = flight.price.raw;
+      const duration = leg.durationInMinutes / 60;
+      const departureHour = new Date(leg.departure).getHours();
+
+      // Price filter
+      if (price > filters.maxPrice) return false;
+
+      // Duration filter
+      if (duration > filters.maxDuration) return false;
+
+      // Stops filter
+      const stopCount = leg.stopCount;
+      if (stopCount === 0 && !filters.stops.direct) return false;
+      if (stopCount === 1 && !filters.stops.oneStop) return false;
+      if (stopCount >= 2 && !filters.stops.twoPlus) return false;
+
+      // Time of day filter
+      if (
+        departureHour >= 6 &&
+        departureHour < 12 &&
+        !filters.timeOfDay.morning
+      )
+        return false;
+      if (
+        departureHour >= 12 &&
+        departureHour < 18 &&
+        !filters.timeOfDay.afternoon
+      )
+        return false;
+      if (
+        departureHour >= 18 &&
+        departureHour < 24 &&
+        !filters.timeOfDay.evening
+      )
+        return false;
+      if (departureHour >= 0 && departureHour < 6 && !filters.timeOfDay.night)
+        return false;
+
+      return true;
+    });
+  };
+
+  const sortFlights = (flights) => {
+    if (!filters.sortBy) return flights;
+
+    return [...flights].sort((a, b) => {
+      switch (filters.sortBy) {
+        case "price_asc":
+          return a.price.raw - b.price.raw;
+        case "price_desc":
+          return b.price.raw - a.price.raw;
+        case "duration_asc":
+          return a.legs[0].durationInMinutes - b.legs[0].durationInMinutes;
+        case "duration_desc":
+          return b.legs[0].durationInMinutes - a.legs[0].durationInMinutes;
+        default:
+          return 0;
+      }
+    });
   };
 
   // https://sky-scrapper.p.rapidapi.com/api/v1/flights/searchAirport?query=baku&locale=en-US
@@ -366,9 +454,29 @@ function App() {
             <p>Finding the best flights for you...</p>
           </div>
         ) : flightResults.length > 0 ? (
-          flightResults.map((itinerary) => (
-            <FlightCard key={itinerary.id} itinerary={itinerary} />
-          ))
+          <>
+            <FlightFilters
+              filters={filters}
+              onFilterChange={handleFilterChange}
+            />
+            <h2 className="flight-group-header">✈️ Departing Flights</h2>
+            {filterFlights(sortFlights(flightResults)).map((itinerary) => (
+              <FlightCard key={itinerary.id} itinerary={itinerary} />
+            ))}
+
+            {searchParams.tripType === "roundTrip" && (
+              <>
+                <hr className="flight-group-divider" />
+                <h2 className="flight-group-header">🛬 Returning Flights</h2>
+                {filterFlights(sortFlights(flightResults)).map((itinerary) => (
+                  <FlightCard
+                    key={`return-${itinerary.id}`}
+                    itinerary={itinerary}
+                  />
+                ))}
+              </>
+            )}
+          </>
         ) : null}
       </div>
     </div>
